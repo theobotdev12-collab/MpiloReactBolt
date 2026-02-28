@@ -10,6 +10,7 @@ import Animated, {
   withRepeat,
   withSequence,
   withTiming,
+  Easing,
 } from 'react-native-reanimated';
 import { Colors } from '@/constants/colors';
 
@@ -17,7 +18,9 @@ const AnimatedView = Animated.createAnimatedComponent(View);
 
 export default function SplashScreen() {
   const scale = useSharedValue(1);
-  const opacity = useSharedValue(1);
+  const dot1Opacity = useSharedValue(0.6);
+  const dot2Opacity = useSharedValue(0.6);
+  const dot3Opacity = useSharedValue(0.6);
 
   useEffect(() => {
     scale.value = withRepeat(
@@ -28,15 +31,53 @@ export default function SplashScreen() {
       -1
     );
 
+    dot1Opacity.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 500, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0.6, { duration: 500, easing: Easing.inOut(Easing.ease) })
+      ),
+      -1
+    );
+
+    dot2Opacity.value = withRepeat(
+      withSequence(
+        withTiming(0.6, { duration: 200 }),
+        withTiming(1, { duration: 500, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0.6, { duration: 500, easing: Easing.inOut(Easing.ease) })
+      ),
+      -1
+    );
+
+    dot3Opacity.value = withRepeat(
+      withSequence(
+        withTiming(0.6, { duration: 400 }),
+        withTiming(1, { duration: 500, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0.6, { duration: 500, easing: Easing.inOut(Easing.ease) })
+      ),
+      -1
+    );
+
     const timer = setTimeout(() => {
       router.replace('/onboarding');
     }, 3500);
 
     return () => clearTimeout(timer);
-  }, [scale]);
+  }, [scale, dot1Opacity, dot2Opacity, dot3Opacity]);
 
   const heartStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
+  }));
+
+  const dot1Style = useAnimatedStyle(() => ({
+    opacity: dot1Opacity.value,
+  }));
+
+  const dot2Style = useAnimatedStyle(() => ({
+    opacity: dot2Opacity.value,
+  }));
+
+  const dot3Style = useAnimatedStyle(() => ({
+    opacity: dot3Opacity.value,
   }));
 
   return (
@@ -54,9 +95,9 @@ export default function SplashScreen() {
         <Text style={styles.subtitle}>Kidney Health Companion</Text>
 
         <View style={styles.loader}>
-          <View style={[styles.loaderDot, styles.loaderDot1]} />
-          <View style={[styles.loaderDot, styles.loaderDot2]} />
-          <View style={[styles.loaderDot, styles.loaderDot3]} />
+          <Animated.View style={[styles.loaderDot, dot1Style]} />
+          <Animated.View style={[styles.loaderDot, dot2Style]} />
+          <Animated.View style={[styles.loaderDot, dot3Style]} />
         </View>
       </Animated.View>
     </LinearGradient>
@@ -98,14 +139,5 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: 'rgba(255, 255, 255, 0.6)',
-  },
-  loaderDot1: {
-    animation: 'pulse 1s infinite 0s',
-  },
-  loaderDot2: {
-    animation: 'pulse 1s infinite 0.2s',
-  },
-  loaderDot3: {
-    animation: 'pulse 1s infinite 0.4s',
   },
 });
