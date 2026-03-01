@@ -19,7 +19,7 @@ const { width } = Dimensions.get('window');
 const slides = [
   {
     id: 1,
-    title: 'Welcome to Impilo',
+    title: 'Welcome to\nImpilo',
     subtitle: 'Your Kidney Health Companion',
     description:
       'Take control of your kidney health with personalized tools, education, and support.',
@@ -28,7 +28,7 @@ const slides = [
   },
   {
     id: 2,
-    title: 'Smart Food Analysis',
+    title: 'Smart Food\nAnalysis',
     subtitle: 'Know What You Eat',
     description:
       'Analyze any food for kidney-friendliness. Get instant ratings on sodium, potassium, and phosphorus levels.',
@@ -37,7 +37,7 @@ const slides = [
   },
   {
     id: 3,
-    title: 'Marketplace & Learning',
+    title: 'Marketplace &\nLearning',
     subtitle: 'Support Your Health',
     description:
       'Browse kidney-friendly products and access curated articles to make informed health decisions.',

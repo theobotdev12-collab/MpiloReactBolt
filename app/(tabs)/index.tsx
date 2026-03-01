@@ -1,62 +1,117 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Heart, Apple, TrendingUp } from 'lucide-react-native';
+import { Heart, AlertCircle, ChevronRight } from 'lucide-react-native';
 import { Colors } from '@/constants/colors';
 
+const { width } = Dimensions.get('window');
+const isSmall = width < 380;
+
 export default function HomeTab() {
+  const recentAnalyses = [
+    {
+      id: 1,
+      name: 'Grilled Salmon',
+      status: 'Caution',
+      statusColor: '#FF9800',
+      image: 'https://images.pexels.com/photos/28259/pexels-photo-28259.jpg?auto=compress&cs=tinysrgb&w=200',
+      date: '11/25/2025',
+    },
+    {
+      id: 2,
+      name: 'Apple Slices',
+      status: 'Good',
+      statusColor: '#4CAF50',
+      image: 'https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=200',
+      date: '11/24/2025',
+    },
+  ];
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <LinearGradient
-        colors={[Colors.primary, Colors.accent]}
+        colors={[Colors.primary, '#1e8a6f']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.header}>
-        <View style={styles.headerContent}>
-          <Heart size={32} color="white" fill="white" />
-          <View>
-            <Text style={styles.greeting}>Welcome back!</Text>
-            <Text style={styles.subGreeting}>Your kidney health journey</Text>
-          </View>
+        <Text style={styles.greeting}>Hello, User</Text>
+        <Text style={styles.subGreeting}>How are your kidneys today?</Text>
+
+        <View style={styles.profileCircle}>
+          <Text style={styles.profileText}>U</Text>
         </View>
       </LinearGradient>
 
       <View style={styles.content}>
+        <View style={styles.tipCard}>
+          <AlertCircle size={20} color={Colors.primary} />
+          <View style={styles.tipContent}>
+            <Text style={styles.tipTitle}>TIP OF THE DAY</Text>
+            <Text style={styles.tipText}>
+              Watch Your Sodium{'\n'}
+              Aim for less than 2,300mg of sodium per day. Read food labels and choose fresh over p...
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.statsContainer}>
+          <View style={styles.statBox}>
+            <Text style={styles.statNumber}>0</Text>
+            <Text style={styles.statLabel}>Foods Analyzed{'\n'}Today</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={styles.statNumber}>3</Text>
+            <Text style={styles.statLabel}>Total Analyses{'\n'}All Time</Text>
+          </View>
+        </View>
+
         <Text style={styles.sectionTitle}>Quick Actions</Text>
+        <View style={styles.actionsContainer}>
+          <TouchableOpacity style={styles.actionButton}>
+            <View style={[styles.actionIcon, { backgroundColor: '#E8F5E9' }]}>
+              <Heart size={20} color={Colors.primary} />
+            </View>
+            <Text style={styles.actionLabel}>Analyze Food</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.card}>
-          <View style={[styles.cardIcon, { backgroundColor: '#FEE5E7' }]}>
-            <Apple size={24} color={Colors.primary} />
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.cardTitle}>Food Analysis</Text>
-            <Text style={styles.cardDescription}>Check food kidney-friendliness</Text>
-          </View>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.actionButton}>
+            <View style={[styles.actionIcon, { backgroundColor: '#FFF3E0' }]}>
+              <Text style={styles.actionIconText}>📦</Text>
+            </View>
+            <Text style={styles.actionLabel}>Marketplace</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.card}>
-          <View style={[styles.cardIcon, { backgroundColor: '#E8F5E9' }]}>
-            <TrendingUp size={24} color={Colors.accent} />
-          </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.cardTitle}>Health Tracking</Text>
-            <Text style={styles.cardDescription}>Monitor your metrics</Text>
-          </View>
-        </TouchableOpacity>
-
-        <Text style={[styles.sectionTitle, { marginTop: 32 }]}>Health Tips</Text>
-        <View style={styles.tipCard}>
-          <Text style={styles.tipTitle}>Potassium Intake</Text>
-          <Text style={styles.tipText}>
-            Limit potassium-rich foods like bananas and potatoes to manage kidney health.
-          </Text>
+          <TouchableOpacity style={styles.actionButton}>
+            <View style={[styles.actionIcon, { backgroundColor: '#E3F2FD' }]}>
+              <Text style={styles.actionIconText}>📚</Text>
+            </View>
+            <Text style={styles.actionLabel}>Education</Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.tipCard}>
-          <Text style={styles.tipTitle}>Stay Hydrated</Text>
-          <Text style={styles.tipText}>
-            Consult your doctor about appropriate fluid intake for your kidney health.
-          </Text>
+        <View style={styles.recentHeader}>
+          <Text style={styles.sectionTitle}>Recent Analyses</Text>
+          <TouchableOpacity>
+            <Text style={styles.seeAll}>See All</Text>
+          </TouchableOpacity>
         </View>
+
+        {recentAnalyses.map((item) => (
+          <TouchableOpacity key={item.id} style={styles.analysisCard}>
+            <View style={styles.analysisImageContainer}>
+              <View style={styles.placeholder} />
+            </View>
+            <View style={styles.analysisContent}>
+              <Text style={styles.analysisName}>{item.name}</Text>
+              <Text style={styles.analysisDate}>{item.date}</Text>
+            </View>
+            <View style={styles.analysisStatus}>
+              <Text style={[styles.statusBadge, { color: item.statusColor }]}>
+                {item.status}
+              </Text>
+              <ChevronRight size={20} color="#999" />
+            </View>
+          </TouchableOpacity>
+        ))}
       </View>
     </ScrollView>
   );
@@ -68,83 +123,174 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   header: {
-    paddingHorizontal: 24,
-    paddingTop: 60,
-    paddingBottom: 32,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
+    paddingHorizontal: 20,
+    paddingTop: 50,
+    paddingBottom: 24,
+    position: 'relative',
   },
   greeting: {
-    fontSize: 24,
+    fontSize: isSmall ? 22 : 26,
     fontWeight: '700',
     color: 'white',
+    marginBottom: 4,
   },
   subGreeting: {
-    fontSize: 14,
+    fontSize: isSmall ? 12 : 14,
     color: 'rgba(255, 255, 255, 0.8)',
-    marginTop: 4,
-  },
-  content: {
-    paddingHorizontal: 24,
-    paddingVertical: 32,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#000',
     marginBottom: 16,
   },
-  card: {
+  profileCircle: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileText: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: 'white',
+  },
+  content: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+  },
+  tipCard: {
+    backgroundColor: '#F5F5F5',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+    flexDirection: 'row',
+    gap: 12,
+  },
+  tipContent: {
+    flex: 1,
+  },
+  tipTitle: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: Colors.primary,
+    marginBottom: 4,
+    letterSpacing: 0.5,
+  },
+  tipText: {
+    fontSize: 13,
+    color: '#555',
+    lineHeight: 18,
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 24,
+  },
+  statBox: {
+    flex: 1,
+    backgroundColor: '#F9F9F9',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E8E8E8',
+  },
+  statNumber: {
+    fontSize: isSmall ? 28 : 32,
+    fontWeight: '700',
+    color: Colors.primary,
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontSize: 12,
+    color: '#666',
+    textAlign: 'center',
+    lineHeight: 16,
+  },
+  sectionTitle: {
+    fontSize: isSmall ? 16 : 18,
+    fontWeight: '700',
+    color: '#000',
+    marginBottom: 12,
+  },
+  actionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+    gap: 8,
+  },
+  actionButton: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  actionIcon: {
+    width: isSmall ? 50 : 56,
+    height: isSmall ? 50 : 56,
+    borderRadius: isSmall ? 10 : 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  actionIconText: {
+    fontSize: isSmall ? 20 : 24,
+  },
+  actionLabel: {
+    fontSize: isSmall ? 11 : 12,
+    fontWeight: '600',
+    color: '#333',
+    textAlign: 'center',
+    lineHeight: 16,
+  },
+  recentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  seeAll: {
+    fontSize: 12,
+    color: Colors.primary,
+    fontWeight: '600',
+  },
+  analysisCard: {
     flexDirection: 'row',
     backgroundColor: 'white',
     borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+    padding: 12,
+    marginBottom: 10,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#f0f0f0',
+    borderColor: '#F0F0F0',
   },
-  cardIcon: {
+  analysisImageContainer: {
+    marginRight: 12,
+  },
+  placeholder: {
     width: 56,
     height: 56,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
+    borderRadius: 8,
+    backgroundColor: '#E0E0E0',
   },
-  cardContent: {
+  analysisContent: {
     flex: 1,
   },
-  cardTitle: {
-    fontSize: 16,
+  analysisName: {
+    fontSize: 14,
     fontWeight: '600',
     color: '#000',
-    marginBottom: 4,
+    marginBottom: 2,
   },
-  cardDescription: {
-    fontSize: 14,
+  analysisDate: {
+    fontSize: 12,
     color: '#999',
   },
-  tipCard: {
-    backgroundColor: '#f9f9f9',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: Colors.primary,
+  analysisStatus: {
+    alignItems: 'flex-end',
+    gap: 4,
   },
-  tipTitle: {
-    fontSize: 16,
+  statusBadge: {
+    fontSize: 12,
     fontWeight: '600',
-    color: '#000',
-    marginBottom: 8,
-  },
-  tipText: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 20,
   },
 });
